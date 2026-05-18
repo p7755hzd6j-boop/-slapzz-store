@@ -1,316 +1,203 @@
-
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SLAPZZ STORE</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLAPZZ Stickers</title>
+    <style>
+        :root {
+            --bg-color: #050505;
+            --card-bg: #1a1a1a;
+            --primary: #7000ff; /* Neon Purple */
+            --accent: #00f3ff; /* Cyan */
+            --text: #ffffff;
+            --text-muted: #aaaaaa;
+            --danger: #ff0055;
+        }
 
-<style>
-body{
-margin:0;
-font-family:Arial;
-background:#0d0d0d;
-color:white;
-direction:rtl;
-}
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text);
+            transition: 0.3s;
+        }
 
-/* NAV /
-.nav{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:15px;
-background:#111;
-position:sticky;
-top:0;
-}
+        /* --- Header --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            position: sticky;
+            top: 0;
+            background: rgba(5, 5, 5, 0.95);
+            z-index: 100;
+            border-bottom: 1px solid #333;
+        }
 
-.nav h1{
-color:#00ffd5;
-}
+        .logo { font-size: 1.5rem; font-weight: bold; color: var(--primary); text-transform: uppercase; letter-spacing: 2px; }
+        
+        .controls { display: flex; gap: 15px; align-items: center; }
+        
+        button {
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 25px;
+            border: 1px solid var(--primary);
+            background: transparent;
+            color: var(--text);
+            font-weight: bold;
+            transition: 0.3s;
+        }
 
-/ HERO /
-.hero{
-text-align:center;
-padding:60px 20px;
-background:linear-gradient(#000000cc,#000000ee),
-url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3');
-background-size:cover;
-}
+        button:hover { background: var(--primary); box-shadow: 0 0 15px var(--primary); }
 
-.hero h2{
-color:#00ffd5;
-font-size:40px;
-}
+        .lang-btn { font-size: 0.9rem; padding: 5px 10px; }
 
-/ GRID /
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-gap:15px;
-padding:20px;
-}
+        /* --- Hero --- */
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: radial-gradient(circle at center, #1f1f1f 0%, #050505 100%);
+        }
+        .hero h1 { font-size: 3rem; margin-bottom: 10px; }
+        .hero p { color: var(--accent); font-size: 1.2rem; }
 
-.card{
-background:#1a1a1a;
-padding:10px;
-border-radius:15px;
-}
+        /* --- Product Grid --- */
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding-bottom: 100px; /* Space for cart */
+        }
 
-.card img{
-width:100%;
-border-radius:10px;
-}
+        .card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #333;
+            transition: transform 0.2s;
+        }
 
-.price{
-color:#00ffd5;
-}
+        .card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        
+        .card-img {
+            width: 100%;
+            height: 180px;
+            background: #222;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+        }
 
-button{
-background:#00ffd5;
-border:none;
-padding:8px;
-margin-top:5px;
-cursor:pointer;
-font-weight:bold;
-}
+        .card-info { padding: 15px; }
+        .card-title { font-size: 1rem; margin-bottom: 5px; }
+        .card-desc { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px; }
+        
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
 
-/ CART /
-.cart{
-position:fixed;
-bottom:20px;
-left:20px;
-background:#00ffd5;
-color:black;
-padding:10px 15px;
-border-radius:30px;
-cursor:pointer;
-font-weight:bold;
-}
+        .price { color: var(--accent); font-weight: bold; font-size: 1.1rem; }
 
-.lang{
-cursor:pointer;
-color:#00ffd5;
-}
-</style>
-</head>
+        .add-btn {
+            border: none;
+            background: var(--primary);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+        }
+        .add-btn:hover { background: var(--accent); color: black; }
 
-<body>
+        /* --- Cart Sidebar --- */
+        #cart-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s;
+            z-index: 200;
+        }
 
-<!-- NAV -->
-<div class="nav">
-<h1>SLAPZZ ⚡</h1>
-<div class="lang" onclick="toggleLang()">🌍 عربي / EN</div>
-</div>
+        #cart-sidebar {
+            position: fixed;
+            right: -400px;
+            top: 0;
+            width: 350px;
+            height: 100%;
+            background: #111;
+            border-left: 1px solid #333;
+            transition: 0.3s;
+            z-index: 201;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+        }
 
-<!-- HERO -->
-<div class="hero">
-<h2 id="title">أفضل ستيكرات</h2>
-<p id="offer">12 جنيه - خصم 10% لأكثر من 20 قطعة</p>
-</div>
+        #cart-sidebar.open { right: 0; }
+        #cart-overlay.active { opacity: 1; pointer-events: all; }
 
-<!-- PRODUCTS -->
-<div class="grid" id="grid"></div>
+        .cart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px;}
+        .close-cart { background: none; border: none; color: var(--danger); font-size: 1.5rem; }
 
-<!-- CART -->
-<div class="cart" onclick="sendOrder()">
-🛒 السلة (<span id="count">0</span>)
-</div>
+        .cart-item { display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #333; }
+        .item-name { font-size: 0.9rem; }
+        .item-price { color: var(--accent); font-size: 0.9rem; }
+        .remove-item { color: var(--danger); cursor: pointer; font-size: 0.8rem; text-decoration: underline; }
 
-<script>
+        .cart-summary { margin-top: auto; padding-top: 20px; border-top: 2px solid var(--primary); }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 1.1rem; }
+        .total-row { font-weight: bold; font-size: 1.4rem; color: var(--accent); }
+        
+        /* Checkout Form */
+        .checkout-form { display: none; margin-top: 20px; }
+        .checkout-form input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #222;
+            border: 1px solid #444;
+            color: white;
+            border-radius: 5px;
+        }
+        .submit-order { width: 100%; background: var(--primary); border: none; font-size: 1.1rem; }
 
-let cart = [];
-let lang = "ar";
-let products = [
-{img:"1.png", size:"5×5", price:12},
-{img:"2.png", size:"5×5", price:12},
-{img:"3.png", size:"5×5", price:12},
-{img:"4.png", size:"5×5", price:12},
-{img:"5.png", size:"5×5", price:12},
-{img:"6.png", size:"5×5", price:12},
-{img:"7.png", size:"5×5", price:12},
-{img:"8.png", size:"5×5", price:12},
-{img:"9.png", size:"5×5", price:12},
-{img:"10.png", size:"5×5", price:12},
-{img:"11.png", size:"5×5", price:12},
-{img:"12.png", size:"5×5", price:12},
-{img:"13.png", size:"5×5", price:12},
-{img:"14.png", size:"5×5", price:12},
-{img:"15.png", size:"5×5", price:12},
-{img:"16.png", size:"5×5", price:12},
-{img:"17.png", size:"5×5", price:12},
-{img:"18.png", size:"5×5", price:12},
-{img:"19.png", size:"5×5", price:12},
-{img:"20.png", size:"5×5", price:12},
+        /* --- Admin Panel (Hidden) --- */
+        #admin-panel {
+            display: none; /* Toggled via JS */
+            margin-top: 50px;
+            padding: 20px;
+            background: #111;
+            border: 1px solid var(--primary);
+        }
+        
+        .order-card {
+            border: 1px solid #444;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            background: #333;
+            cursor: pointer;
+        }
+        .status-processing { background: orange; color: black; }
+        .status-shipped { background: green; color: white; }
 
-{img:"21.png", size:"5×5", price:12},
-{img:"22.png", size:"5×5", price:12},
-{img:"23.png", size:"5×5", price:12},
-{img:"24.png", size:"5×5", price:12},
-{img:"25.png", size:"5×5", price:12},
-{img:"26.png", size:"5×5", price:12},
-{img:"27.png", size:"5×5", price:12},
-{img:"28.png", size:"5×5", price:12},
-{img:"29.png", size:"5×5", price:12},
-{img:"30.png", size:"5×5", price:12},
-
-{img:"31.png", size:"5×5", price:12},
-{img:"32.png", size:"5×5", price:12},
-{img:"33.png", size:"5×5", price:12},
-{img:"34.png", size:"5×5", price:12},
-{img:"35.png", size:"5×5", price:12},
-{img:"36.png", size:"5×5", price:12},
-{img:"37.png", size:"5×5", price:12},
-{img:"38.png", size:"5×5", price:12},
-{img:"39.png", size:"5×5", price:12},
-{img:"40.png", size:"5×5", price:12},
-
-{img:"41.png", size:"5×5", price:12},
-{img:"42.png", size:"5×5", price:12},
-{img:"43.png", size:"5×5", price:12},
-{img:"44.png", size:"5×5", price:12},
-{img:"45.png", size:"5×5", price:12},
-{img:"46.png", size:"5×5", price:12},
-{img:"47.png", size:"5×5", price:12},
-{img:"48.png", size:"5×5", price:12},
-{img:"49.png", size:"5×5", price:12},
-{img:"50.png", size:"5×5", price:12},
-
-{img:"51.png", size:"5×5", price:12},
-{img:"52.png", size:"5×5", price:12},
-{img:"53.png", size:"5×5", price:12},
-{img:"54.png", size:"5×5", price:12},
-{img:"55.png", size:"5×5", price:12},
-{img:"56.png", size:"5×5", price:12},
-{img:"57.png", size:"5×5", price:12},
-{img:"58.png", size:"5×5", price:12},
-{img:"59.png", size:"5×5", price:12},
-{img:"60.png", size:"5×5", price:12},
-
-{img:"61.png", size:"5×5", price:12},
-{img:"62.png", size:"5×5", price:12},
-{img:"63.png", size:"5×5", price:12},
-{img:"64.png", size:"5×5", price:12},
-{img:"65.png", size:"5×5", price:12},
-{img:"66.png", size:"5×5", price:12},
-{img:"67.png", size:"5×5", price:12},
-{img:"68.png", size:"5×5", price:12},
-{img:"69.png", size:"5×5", price:12},
-{img:"70.png", size:"5×5", price:12},
-
-{img:"71.png", size:"5×5", price:12},
-{img:"72.png", size:"5×5", price:12},
-{img:"73.png", size:"5×5", price:12},
-{img:"74.png", size:"5×5", price:12},
-{img:"75.png", size:"5×5", price:12},
-{img:"76.png", size:"5×5", price:12},
-{img:"77.png", size:"5×5", price:12},
-{img:"78.png", size:"5×5", price:12},
-{img:"79.png", size:"5×5", price:12},
-{img:"80.png", size:"5×5", price:12},
-
-{img:"81.png", size:"5×5", price:12},
-{img:"82.png", size:"5×5", price:12},
-{img:"83.png", size:"5×5", price:12},
-{img:"84.png", size:"5×5", price:12},
-{img:"85.png", size:"5×5", price:12},
-{img:"86.png", size:"5×5", price:12},
-{img:"87.png", size:"5×5", price:12},
-{img:"88.png", size:"5×5", price:12},
-{img:"89.png", size:"5×5", price:12},
-{img:"90.png", size:"5×5", price:12},
-
-{img:"91.png", size:"5×5", price:12},
-{img:"92.png", size:"5×5", price:12},
-{img:"93.png", size:"5×5", price:12},
-{img:"94.png", size:"5×5", price:12},
-{img:"95.png", size:"5×5", price:12},
-{img:"96.png", size:"5×5", price:12},
-{img:"97.png", size:"5×5", price:12},
-{img:"98.png", size:"5×5", price:12},
-{img:"99.png", size:"5×5", price:12},
-{img:"100.png", size:"5×5", price:12},
-
-{img:"101.png", size:"5×5", price:12},
-{img:"102.png", size:"5×5", price:12},
-{img:"103.png", size:"5×5", price:12},
-{img:"104.png", size:"5×5", price:12},
-{img:"105.png", size:"5×5", price:12},
-{img:"106.png", size:"5×5", price:12},
-{img:"107.png", size:"5×5", price:12},
-{img:"108.png", size:"5×5", price:12},
-{img:"109.png", size:"5×5", price:12},
-{img:"110.png", size:"5×5", price:12},
-
-{img:"111.png", size:"5×5", price:12},
-{img:"112.png", size:"5×5", price:12},
-{img:"113.png", size:"5×5", price:12},
-{img:"114.png", size:"5×5", price:12},
-{img:"115.png", size:"5×5", price:12},
-{img:"116.png", size:"5×5", price:12},
-{img:"117.png", size:"5×5", price:12},
-{img:"118.png", size:"5×5", price:12},
-{img:"119.png", size:"5×5", price:12},
-{img:"120.png", size:"5×5", price:12},
-
-{img:"121.png", size:"5×5", price:12},
-{img:"122.png", size:"5×5", price:12},
-{img:"123.png", size:"5×5", price:12},
-{img:"124.png", size:"5×5", price:12},
-{img:"125.png", size:"5×5", price:12},
-{img:"126.png", size:"5×5", price:12},
-{img:"127.png", size:"5×5", price:12},
-{img:"128.png", size:"5×5", price:12},
-{img:"129.png", size:"5×5", price:12},
-{img:"130.png", size:"5×5", price:12},
-
-{img:"131.png", size:"5×5", price:12},
-{img:"132.png", size:"5×5", price:12},
-{img:"133.png", size:"5×5", price:12},
-{img:"134.png", size:"5×5", price:12},
-{img:"135.png", size:"5×5", price:12},
-{img:"136.png", size:"5×5", price:12},
-{img:"137.png", size:"5×5", price:12},
-{img:"138.png", size:"5×5", price:12},
-{img:"139.png", size:"5×5", price:12},
-{img:"140.png", size:"5×5", price:12},
-]; 
-function loadProducts(){
-let grid = document.getElementById("grid")  
-products.forEach(p=>{
-grid.innerHTML += <div class="card"> <img src="${p.img}"> <h3>${p.size}</h3> <p class="price">${p.price} EGP</p> <button onclick="addToCart('${p.size}')">إضافة</button> <p>خصم 10% عند +20 قطعة</p> </div>;
-});
-}
-
-function addToCart(item){
-cart.push(item);
-document.getElementById("count").innerText = cart.length;
-}
-
-function sendOrder(){
-let msg = "طلب جديد:%0A" + cart.join("%0A");
-window.open("https://wa.me/+02 1116055983?text=" + msg);
-}
-
-function toggleLang(){
-
-if(lang==="ar"){
-lang="en";
-document.body.style.direction="ltr";
-document.getElementById("title").innerText="Best Stickers";
-document.getElementById("offer").innerText="12 EGP - 10% off for 20+ items";
-}else{
-lang="ar";
-document.body.style.direction="rtl";
-document.getElementById("title").innerText="أفضل ستيكرات";
-document.getElementById("offer").innerText="12 جنيه - خصم 10% لأكثر من 20 قطعة";
-}
-}
-
-loadProducts();
-
-</script>
-
-</body>
-</html>
+        /* Utilities */
+        [dir="rtl"] .add-btn { float: left; }
+        [dir="
