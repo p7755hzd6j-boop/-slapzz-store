@@ -1,89 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SLAPZZ STICKERS</title>
+<title>SLAPZZ STORE</title>
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial, sans-serif;
-}
-
 body{
+margin:0;
+font-family:Arial;
 background:#0d0d0d;
 color:white;
+direction:rtl;
+}
+
+/* NAV */
+.nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px;
+background:#111;
+position:sticky;
+top:0;
+}
+
+.nav h1{
+color:#00ffd5;
+font-size:20px;
 }
 
 /* HERO */
 .hero{
-height:100vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
 text-align:center;
-background:
-linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)),
-url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=80');
+padding:60px 20px;
+background:linear-gradient(#000000cc,#000000ee),
+url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3');
 background-size:cover;
-background-position:center;
-padding:20px;
 }
 
-.hero h1{
-font-size:60px;
-color:#00ffd5;
-text-shadow:0 0 20px #00ffd5;
-}
-
-.hero p{
-font-size:20px;
-margin-top:10px;
-color:#ddd;
-}
-
-.btn{
-margin-top:25px;
-padding:15px 35px;
-background:#00ffd5;
-color:black;
-border-radius:50px;
-text-decoration:none;
-font-weight:bold;
-transition:0.3s;
-}
-
-.btn:hover{
-transform:scale(1.1);
-}
-
-/* SECTIONS */
-.section{
-padding:80px 20px;
-text-align:center;
-}
-
-.section h2{
+.hero h2{
 color:#00ffd5;
 font-size:40px;
-margin-bottom:40px;
 }
 
-/* PRODUCTS */
-.products{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:20px;
+/* GRID */
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:15px;
+padding:20px;
 }
 
 .card{
 background:#1a1a1a;
-padding:20px;
-width:220px;
+padding:10px;
 border-radius:15px;
 transition:0.3s;
 }
@@ -99,70 +69,78 @@ border-radius:10px;
 
 .price{
 color:#00ffd5;
-margin-top:5px;
 }
 
-/* FEATURES */
-.features{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:20px;
-}
-
-.feature{
-background:#1a1a1a;
-padding:25px;
-width:250px;
-border-radius:20px;
+/* CART */
+.cart{
+position:fixed;
+bottom:20px;
+left:20px;
+background:#00ffd5;
+color:black;
+padding:10px 15px;
+border-radius:30px;
+font-weight:bold;
+cursor:pointer;
 }
 
 </style>
 </head>
 <body>
-<!-- HERO -->
+<div class="nav">
+<h1>SLAPZZ ⚡</h1>
+<span>Store</span>
+</div>
 <div class="hero">
-<h1>SLAPZZ STICKERS ⚡</h1>
-<p>Premium Street Style Stickers</p>
-<a href="#" class="btn">COMING SOON</a>
+<h2>أفضل ستيكرات 🔥</h2>
+<p>اضغط على أي منتج للإضافة للسلة</p>
 </div>
 <!-- PRODUCTS -->
-<div class="section">
-<h2>Featured Stickers</h2>
-<div class="products">
-<div class="card">
-<img src="https://via.placeholder.com/200">
-<h3>Anime Pack</h3>
-<div class="price">12 EGP</div>
-</div>
-<div class="card">
-<img src="https://via.placeholder.com/200">
-<h3>Street Pack</h3>
-<div class="price">15 EGP</div>
-</div>
-<div class="card">
-<img src="https://via.placeholder.com/200">
-<h3>Car Pack</h3>
-<div class="price">18 EGP</div>
-</div>
-</div>
-</div>
-<!-- FEATURES -->
-<div class="section">
-<h2>Why Choose Us?</h2>
-<div class="feature">
-<h3>⚡ Premium Quality</h3>
-<p>Waterproof & durable stickers.</p>
-</div>
-<div class="feature">
-<h3>🎨 Unique Designs</h3>
-<p>Street-style creative artwork.</p>
-</div>
-<div class="feature">
-<h3>🚀 Fast Delivery</h3>
-<p>Shipping inside Egypt.</p>
-</div>
-</div>
-</div>
+<div class="grid" id="grid"></div>
+<script>
+
+let cart = [];
+
+/* 👇 هنا تحط كل الصور بتاعتك */
+let products = [
+
+{ name:"Sticker 1", price:12, img:"sticker1.png" },
+{ name:"Sticker 2", price:12, img:"sticker2.png" },
+{ name:"Sticker 3", price:12, img:"sticker3.png" },
+
+// كمل هنا لحد 140 صورة
+];
+
+function loadProducts(){
+let grid = document.getElementById("grid");
+
+products.forEach(p=>{
+let div = document.createElement("div");
+div.className = "card";
+
+div.innerHTML = `
+<img src="${p.img}">
+<h3>${p.name}</h3>
+<p class="price">${p.price} EGP</p>
+<button onclick="addToCart('${p.name}')">إضافة</button>
+`;
+
+grid.appendChild(div);
+});
+}
+
+function addToCart(name){
+cart.push(name);
+alert("تمت الإضافة 🛒");
+}
+
+function sendOrder(){
+let msg = "طلب جديد:%0A" + cart.join("%0A");
+window.open("https://wa.me/201000000000?text=" + msg);
+}
+
+loadProducts();
+
+</script>
 </body>
 </html>
